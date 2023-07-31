@@ -1,33 +1,17 @@
 export const convertNumber = (number: number): string => {
-    const { symbol, remainder} = subtractLargestValueInLookupFromNumber(number, newLookupTable);
+    const { symbol, remainder} = subtractLargestValueInLookupFromNumber(number, lookupTable);
     return remainder === 0 ? symbol : symbol + convertNumber(remainder);
 }
 
 const subtractLargestValueInLookupFromNumber = (number: number, lookup: LookupValue[]): SubtractionResult => {
-    const {value, symbol} = lookup[0];
+    const [{value, symbol}, ...remainingValues] = lookup;
     return number >= value ? {
         symbol,
         remainder: number - value
-    } : subtractLargestValueInLookupFromNumber(number, lookup.slice(1));
+    } : subtractLargestValueInLookupFromNumber(number, remainingValues);
 }
 
-const lookupTable: [number, string][] = [
-    [1000, "M"],
-    [900, "CM"],
-    [500, "D"],
-    [400, "CD"],
-    [100, "C"],
-    [90, "XC"],
-    [50, "L"],
-    [40, "XL"],
-    [10, "X"],
-    [9, "IX"],
-    [5, "V"],
-    [4, "IV"],
-    [1, "I"],
-]
-
-const newLookupTable: LookupValue[] = [
+const lookupTable: LookupValue[] = [
     {value: 1000, symbol: "M"},
     {value: 900, symbol: "CM"},
     {value: 500, symbol: "D"},
